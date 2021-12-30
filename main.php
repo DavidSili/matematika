@@ -10,12 +10,13 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name=viewport content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0'>
-	<link rel="stylesheet" href="../assets/css/style.css?t=1">
+	<link rel="stylesheet" href="../assets/css/style.css?t=2">
 </head>
 <body>
 <div class="wrapper">
 	<div class="header">
 		<div class="title">Učenje <?=$operationRsAc?></div>
+		<div class="time hidden"></div>
 		<div class="form form--type">
 			<label class="form__label">Vrsta testa:</label>
 			<select class="type">
@@ -50,6 +51,6 @@
 	const operand = '<?=$operand?>';
 </script>
 <script src="../assets/js/jquery-3.6.0.min.js"></script>
-<script src="../assets/js/test.js?t=0"></script>
+<script src="../assets/js/test.js?t=1"></script>
 </body>
 </html>

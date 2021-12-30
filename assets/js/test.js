@@ -36,7 +36,12 @@ $(function() {
 		getNewTest();
 	});
 	
+	setInterval(function() {
+		updateTime();
+	}, 5000);
+	
 	getNewTest();
+	updateTime();
 });
 
 function checkAnswers() {
@@ -46,6 +51,7 @@ function checkAnswers() {
 	const $grade = $('.test-grade');
 	$grade.html('');
 	$messageContainer.removeClass('hidden');
+	$('.time').removeClass('hidden');
 	$('.form').addClass('hidden');
 	let rowStr;
 	let correctAnswers = 0;
@@ -71,7 +77,7 @@ function checkAnswers() {
 function getNextTest() {
 	const $form = $('.form');
 	$form.removeClass('hidden');
-	$('.message-container').addClass('hidden');
+	$('.message-container, .time').addClass('hidden');
 	const testId = $form.data('test-id');
 	const $task = $form.find('.task');
 	const $answer = $form.find('.answer');
@@ -133,4 +139,30 @@ function numberDeclension(number, one, two, rest) {
 function updateProgressIndicator() {
 	const testId = $('.form').data('test-id');
 	$('.progress-indicator').html(`${testId}/${numberOfTests}`);
+}
+
+function updateTime() {
+	$('.time').html(getTimeRs(false, true));
+}
+
+function getTimeRs(seconds = true, split = false) {
+	const d = new Date();
+	const hr = d.getHours();
+	let min = d.getMinutes();
+	if (min < 10) {
+		min = '0' + min;
+	}
+	let sec = d.getSeconds();
+	if (sec < 10) {
+		sec = '0' + sec;
+	}
+	sec = seconds ? `:${sec}` : ''
+	
+	const day = d.getDate();
+	const month = d.getMonth() + 1;
+	const year = d.getFullYear();
+	
+	const splitStr = split ? '<br>' : ' ';
+	
+	return `${day}.${month}.${year}.${splitStr}${hr}:${min}${sec}`;
 }

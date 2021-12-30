@@ -5,9 +5,17 @@
 }
 
 .title {
-	text-align: center;
+	text-align: left;
 	font-size: 30px;
 	margin-bottom: 10px;
+	display: inline-block;
+}
+.time {
+	float: right;
+	color: #eee;
+	font-size: 8pt;
+	text-align: right;
+	margin-top: 5px;
 }
 .form {
 	&--type {
