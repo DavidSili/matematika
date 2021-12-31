@@ -48,6 +48,7 @@
 	</div>
 </div>
 <script>
+	const operation = '<?=$operation?>';
 	const operand = '<?=$operand?>';
 </script>
 <script src="../assets/js/jquery-3.6.0.min.js"></script>

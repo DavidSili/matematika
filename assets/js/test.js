@@ -54,7 +54,7 @@ function checkAnswers() {
 	for (let i = 1; i <= (numberOfTests + 1); i++) {
 		if (i > numberOfTests) {
 			if (correctAnswers === numberOfTests) {
-				$grade.html('Bravo! Svi odgovori su bili tačni!');
+				$grade.html('Bravo! Svi odgovori su ti tačni!');
 			} else {
 				$grade.html(`${correctAnswers} tačnih od ukupno ${numberOfTests} ${numberDeclension(numberOfTests, 'zadatka', 'zadatka', 'zadataka')}. Sledeći put će biti bolje!`);
 			}
@@ -99,13 +99,49 @@ function getNewTest() {
 
 function getTestItem() {
 	const type = parseInt($('.type').val());
-	const max2 = type > 10 ? type : 10;
-	const number1 = Math.floor(Math.random() * (type + 1));
-	const number2 = Math.floor(Math.random() * (max2 + 1));
-	return {
-		'number1': number1,
-		'number2': number2,
-		'answer': number1 * number2,
+	let number1, number2, max, max2, product;
+	let foundAnswer = false;
+	switch (operation) {
+		case 'addition':
+			max = Math.floor(Math.random() * (type - 1)) + 2;
+			number1 = Math.floor(Math.random() * (max - 1)) + 1;
+			number2 = max - number1;
+			return {
+				'number1': number1,
+				'number2': number2,
+				'answer': max,
+			}
+		case 'subtraction':
+			number1 = Math.floor(Math.random() * (type - 1)) + 2;
+			number2 = Math.floor(Math.random() * (number1 - 1)) + 1;
+			return {
+				'number1': number1,
+				'number2': number2,
+				'answer': number1 - number2,
+			}
+		case 'multiplication':
+			max2 = type > 10 ? type : 10;
+			number1 = Math.floor(Math.random() * (type + 1));
+			number2 = Math.floor(Math.random() * (max2 + 1));
+			return {
+				'number1': number1,
+				'number2': number2,
+				'answer': number1 * number2,
+			}
+		case 'division':
+			while (foundAnswer === false) {
+				number1 = Math.floor(Math.random() * type) + 1;
+				number2 = Math.floor(Math.random() * type) + 1;
+				product = number1 * number2;
+				if (product <= type && !(type > 10 && (number1 === 1 || number2 === 2))) {
+					foundAnswer = true;
+				}
+			}
+			return {
+				'number1': product,
+				'number2': number1,
+				'answer': number2,
+			}
 	}
 }
 
