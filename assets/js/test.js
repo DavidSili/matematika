@@ -133,7 +133,7 @@ function getTestItem() {
 				number1 = Math.floor(Math.random() * type) + 1;
 				number2 = Math.floor(Math.random() * type) + 1;
 				product = number1 * number2;
-				if (product <= type && !(type > 10 && (number1 === 1 || number2 === 2))) {
+				if (product <= type && !(type > 10 && (number1 === 1 || number2 === 1 || product === 1))) {
 					foundAnswer = true;
 				}
 			}
