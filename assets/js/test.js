@@ -36,12 +36,7 @@ $(function() {
 		getNewTest();
 	});
 	
-	setInterval(function() {
-		updateTime();
-	}, 5000);
-	
 	getNewTest();
-	updateTime();
 });
 
 function checkAnswers() {
@@ -51,6 +46,7 @@ function checkAnswers() {
 	const $grade = $('.test-grade');
 	$grade.html('');
 	$messageContainer.removeClass('hidden');
+	updateTime();
 	$('.time').removeClass('hidden');
 	$('.form').addClass('hidden');
 	let rowStr;
