@@ -36,6 +36,16 @@ $(function() {
 		getNewTest();
 	});
 	
+	$('.menu-btn').on('click', function() {
+		if ($(this).is('.toggled')) {
+			$(this).removeClass('toggled');
+			$('.wrapper').scrollLeft(1000);
+		} else {
+			$(this).addClass('toggled');
+			$('.wrapper').scrollLeft(-1000);
+		}
+	});
+	
 	getNewTest();
 });
 
@@ -47,7 +57,6 @@ function checkAnswers() {
 	$grade.html('');
 	$messageContainer.removeClass('hidden');
 	updateTime();
-	$('.time').removeClass('hidden');
 	$('.form').addClass('hidden');
 	let rowStr;
 	let correctAnswers = 0;
@@ -73,7 +82,7 @@ function checkAnswers() {
 function getNextTest() {
 	const $form = $('.form');
 	$form.removeClass('hidden');
-	$('.message-container, .time').addClass('hidden');
+	$('.message-container').addClass('hidden');
 	const testId = $form.data('test-id');
 	const $task = $form.find('.task');
 	const $answer = $form.find('.answer');
@@ -174,7 +183,7 @@ function updateProgressIndicator() {
 }
 
 function updateTime() {
-	$('.time').html(getTimeRs(false, true));
+	$('.time').html(getTimeRs(false));
 }
 
 function getTimeRs(seconds = true, split = false) {
