@@ -35,7 +35,15 @@
 				<tbody></tbody>
 			</table>
 			<p class="test-grade"></p>
+			<button class="btn btn-secondary tests-report-btn">Pregled testova</button>
 			<button class="btn btn-secondary new-test-btn">Ponovi test</button>
+		</div>
+		<div class="report-container hidden">
+			<div class="title title--small">Izveštaj za <span class="date-span"></span></div>
+			<table class="report-table table table-bordered">
+				<tbody></tbody>
+			</table>
+			<button class="btn btn-secondary new-test-btn">Novi test</button>
 		</div>
 	</div>
 </div>
@@ -44,6 +52,6 @@
 	const operand = '<?=$operand?>';
 </script>
 <script src="../assets/js/jquery-3.6.0.min.js"></script>
-<script src="../assets/js/test.js?t=5"></script>
+<script src="../assets/js/test.js?t=6"></script>
 </body>
 </html>

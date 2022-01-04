@@ -15,4 +15,6 @@
 	<a href="/matematika/deljenje" class="menu__link">
 		<li class="menu__item<?=$operation === 'division' ? ' active' : ''?>">
 		÷ Deljenje</li></a>
+	<a class="menu__link">
+		<li class="menu__item tests-report-btn"><i class="fa fa-list"></i> Pregled testova</li></a>
 </ul>

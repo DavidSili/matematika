@@ -47,8 +47,57 @@ $(function() {
 		}
 	});
 	
+	$('.tests-report-btn').on('click', function() {
+		if ($(this).closest('.menu').length > 0) {
+			$('.wrapper').scrollLeft(1000);
+		}
+		$('.message-container, .form').addClass('hidden');
+		const $reportContainer = $('.report-container');
+		$reportContainer.find('.date-span').html(getTimeRs(false));
+		$reportContainer.removeClass('hidden');
+		const $tbody = $('.report-table tbody');
+		$tbody.html('');
+		const localStorage = window.localStorage;
+		const savedReportData = localStorage.getItem('testsReportData');
+		const testsReportData = JSON.parse(savedReportData);
+		let sortedData = testsReportData[operation].map(a => Object.assign({}, a));
+		sortedData.sort(
+			function(a, b) {
+				if (a.percentage === b.percentage) {
+					return b.unix - a.unix;
+				}
+				return a.percentage > b.percentage ? -1 : 1;
+			});
+		let row;
+		for (let i = 0; i < sortedData.length; i++) {
+			row = sortedData[i];
+			$tbody.append(`<tr><td>${row.correctAnswers}</td><td>od</td><td>${row.numberOfTests}</td><td>${row.timestamp}</td></tr>`);
+		}
+	});
+	
+	checkTestsReportData();
 	getNewTest();
 });
+
+function checkTestsReportData() {
+	const localStorage = window.localStorage;
+	const savedDate = localStorage.getItem('testDate');
+	const currentDate = getDateStamp();
+	if (savedDate !== currentDate) {
+		localStorage.setItem('testDate', currentDate);
+		const testsReportData = {};
+		testsReportData[operation] = [];
+		localStorage.setItem('testsReportData', JSON.stringify(testsReportData));
+	} else {
+		const savedReportData = localStorage.getItem('testsReportData');
+		const objReportData = JSON.parse(savedReportData);
+		
+		if (!objReportData.hasOwnProperty(operation)) {
+			objReportData[operation] = [];
+			localStorage.setItem('testsReportData', JSON.stringify(objReportData));
+		}
+	}
+}
 
 function checkAnswers() {
 	const $messageContainer = $('.message-container');
@@ -58,7 +107,7 @@ function checkAnswers() {
 	$grade.html('');
 	$messageContainer.removeClass('hidden');
 	updateTime();
-	$('.form').addClass('hidden');
+	$('.form, .report-container').addClass('hidden');
 	let rowStr;
 	let correctAnswers = 0;
 	for (let i = 1; i <= (numberOfTests + 1); i++) {
@@ -66,8 +115,20 @@ function checkAnswers() {
 			if (correctAnswers === numberOfTests) {
 				$grade.html('Bravo! Svi odgovori su ti tačni!');
 			} else {
-				$grade.html(`${correctAnswers} tačnih od ukupno ${numberOfTests} ${numberDeclension(numberOfTests, 'zadatka', 'zadatka', 'zadataka')}. Sledeći put će biti bolje!`);
+				$grade.html(`${correctAnswers} ${numberDeclension(correctAnswers, 'tačan', 'tačna', 'tačnih')} od ukupno ${numberOfTests} ${numberDeclension(numberOfTests, 'zadatka', 'zadatka', 'zadataka')}. Sledeći put će biti bolje!`);
 			}
+			const localStorage = window.localStorage;
+			const savedReportData = localStorage.getItem('testsReportData');
+			const testsReportData = JSON.parse(savedReportData);
+			testsReportData[operation].push({
+				correctAnswers: correctAnswers,
+				numberOfTests: numberOfTests,
+				percentage: correctAnswers === 0 ? 0 :
+					Math.round((correctAnswers / numberOfTests) * 100) / 100,
+				timestamp: getTimeRs(false),
+				unix: getUnixTimestamp(),
+			});
+			localStorage.setItem('testsReportData', JSON.stringify(testsReportData));
 		} else {
 			if (test[i].answer === testResults[i]) {
 				rowStr = `<tr><td>${test[i].number1}</td><td>${operand}</td><td>${test[i].number2}</td><td>=</td><td class="correct">${testResults[i]}</td></tr>`;
@@ -83,7 +144,7 @@ function checkAnswers() {
 function getNextTest() {
 	const $form = $('.form');
 	$form.removeClass('hidden');
-	$('.message-container').addClass('hidden');
+	$('.message-container, .report-container').addClass('hidden');
 	const testId = $form.data('test-id');
 	const $task = $form.find('.task');
 	const $answer = $form.find('.answer');
@@ -204,6 +265,17 @@ function updateTime() {
 	$('.time').html(getTimeRs(false));
 }
 
+function getDateStamp() {
+	const d = new Date();
+	let day = d.getDate().toString();
+	day = day.length === 1 ? '0' + day : day;
+	let month = (d.getMonth() + 1).toString();
+	month = month.length === 1 ? '0' + month : month;
+	const year = d.getFullYear();
+	
+	return `${year}-${month}-${day}`
+}
+
 function getTimeRs(seconds = true, split = false) {
 	const d = new Date();
 	const hr = d.getHours();
@@ -224,4 +296,10 @@ function getTimeRs(seconds = true, split = false) {
 	const splitStr = split ? '<br>' : ' ';
 	
 	return `${day}.${month}.${year}.${splitStr}${hr}:${min}${sec}`;
+}
+
+function getUnixTimestamp() {
+	const d = new Date;
+	
+	return d.getTime();
 }
