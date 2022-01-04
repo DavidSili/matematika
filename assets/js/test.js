@@ -6,7 +6,8 @@ $(function() {
 	$('.check-btn').on('click', function() {
 		const $form = $('.form');
 		const $answer = $form.find('.answer');
-		const answer = $answer.val().trim();
+		let answer = $answer.val();
+		answer = answer.replace(/[^0-9]/, '');
 		$answer.removeClass('error');
 		if (answer === '') {
 			$answer.addClass('error');

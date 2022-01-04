@@ -44,6 +44,6 @@
 	const operand = '<?=$operand?>';
 </script>
 <script src="../assets/js/jquery-3.6.0.min.js"></script>
-<script src="../assets/js/test.js?t=4"></script>
+<script src="../assets/js/test.js?t=5"></script>
 </body>
 </html>
