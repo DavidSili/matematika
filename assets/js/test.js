@@ -96,12 +96,24 @@ function getNextTest() {
 function getNewTest() {
 	$('.form').data('test-id', 1);
 	test = {};
+	let hasZero = false;
+	let newTestItem;
 	for (let i = 1; i <= (numberOfTests + 1); i++) {
 		if (i > numberOfTests) {
 			$('.answer').focus();
 			getNextTest();
 		} else {
-			test[i] = getTestItem();
+			newTestItem = getTestItem();
+			if (operation === 'multiplication' && newTestItem.answer === 0) {
+				if (!hasZero) {
+					hasZero = true;
+					test[i] = newTestItem;
+				} else {
+					i--;
+				}
+			} else {
+				test[i] = newTestItem;
+			}
 		}
 	}
 }
@@ -129,9 +141,14 @@ function getTestItem() {
 				'answer': number1 - number2,
 			}
 		case 'multiplication':
-			max2 = type > 10 ? type : 10;
-			number1 = Math.floor(Math.random() * (type + 1));
-			number2 = Math.floor(Math.random() * (max2 + 1));
+			while (foundAnswer === false) {
+				max2 = type > 10 ? type : 10;
+				number1 = Math.floor(Math.random() * (type + 1));
+				number2 = Math.floor(Math.random() * (max2 + 1));
+				if (!(number1 === 0 && number2 === 0)) {
+					foundAnswer = true;
+				}
+			}
 			return {
 				'number1': number1,
 				'number2': number2,
