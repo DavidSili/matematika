@@ -71,7 +71,7 @@ $(function() {
 		let row;
 		for (let i = 0; i < sortedData.length; i++) {
 			row = sortedData[i];
-			$tbody.append(`<tr><td>${row.correctAnswers}</td><td>od</td><td>${row.numberOfTests}</td><td>${row.timestamp}</td></tr>`);
+			$tbody.append(`<tr><td>${row.correctAnswers}</td><td>${row.numberOfTests}</td><td>Do ${row.type}</td><td>${row.timestamp}</td></tr>`);
 		}
 	});
 	
@@ -110,6 +110,7 @@ function checkAnswers() {
 	$('.form, .report-container').addClass('hidden');
 	let rowStr;
 	let correctAnswers = 0;
+	const type = parseInt($('.type').val());
 	for (let i = 1; i <= (numberOfTests + 1); i++) {
 		if (i > numberOfTests) {
 			if (correctAnswers === numberOfTests) {
@@ -127,6 +128,7 @@ function checkAnswers() {
 					Math.round((correctAnswers / numberOfTests) * 100) / 100,
 				timestamp: getTimeRs(false),
 				unix: getUnixTimestamp(),
+				type: type,
 			});
 			localStorage.setItem('testsReportData', JSON.stringify(testsReportData));
 		} else {

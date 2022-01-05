@@ -41,6 +41,14 @@
 		<div class="report-container hidden">
 			<div class="title title--small">Izveštaj za <span class="date-span"></span></div>
 			<table class="report-table table table-bordered">
+				<thead>
+				<tr>
+					<th>Tačnih</th>
+					<th>Ukupno</th>
+					<th>Vrsta</th>
+					<th>Vreme</th>
+				</tr>
+				</thead>
 				<tbody></tbody>
 			</table>
 			<button class="btn btn-secondary new-test-btn">Novi test</button>
@@ -52,6 +60,6 @@
 	const operand = '<?=$operand?>';
 </script>
 <script src="../assets/js/jquery-3.6.0.min.js"></script>
-<script src="../assets/js/test.js?t=6"></script>
+<script src="../assets/js/test.js?t=7"></script>
 </body>
 </html>
