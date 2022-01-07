@@ -181,6 +181,10 @@ function getNewTest() {
 			getNextTest();
 		} else {
 			newTestItem = getTestItem();
+			if (inArrayObj(test, newTestItem)) {
+				i--;
+				continue;
+			}
 			if (operation === 'multiplication' && newTestItem.answer === 0) {
 				if (!hasZero) {
 					hasZero = true;
@@ -193,6 +197,19 @@ function getNewTest() {
 			}
 		}
 	}
+}
+
+function inArrayObj(collection, object) {
+	const keys = Object.keys(collection);
+	let row;
+	for (let i = 0; i < keys.length; i++) {
+		row = collection[parseInt(keys[i])];
+		if (row.number1 === object.number1 && row.number2 === object.number2) {
+			return true;
+		}
+	}
+	
+	return false;
 }
 
 function getTestItem() {
