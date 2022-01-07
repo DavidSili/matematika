@@ -65,7 +65,10 @@ $(function() {
 		sortedData.sort(
 			function(a, b) {
 				if (a.percentage === b.percentage) {
-					return b.unix - a.unix;
+					if (a.type === b.type) {
+						return b.unix - a.unix;
+					}
+					return b.type - a.type;
 				}
 				return a.percentage > b.percentage ? -1 : 1;
 			});
