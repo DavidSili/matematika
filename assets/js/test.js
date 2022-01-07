@@ -34,6 +34,7 @@ $(function() {
 	});
 	
 	$('.type').on('change', function() {
+		window.localStorage.setItem(`prefType_${operation}`, parseInt($(this).val()));
 		getNewTest();
 	});
 	
@@ -76,8 +77,17 @@ $(function() {
 	});
 	
 	checkTestsReportData();
-	getNewTest();
+	loadPrefType();
 });
+
+function loadPrefType() {
+	const localStorage = window.localStorage;
+	const prefType = localStorage.getItem(`prefType_${operation}`);
+	if (prefType) {
+		$('.type').val(prefType);
+	}
+	getNewTest();
+}
 
 function checkTestsReportData() {
 	const localStorage = window.localStorage;
