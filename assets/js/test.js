@@ -75,7 +75,7 @@ $(function() {
 		let row;
 		for (let i = 0; i < sortedData.length; i++) {
 			row = sortedData[i];
-			$tbody.append(`<tr><td>${row.correctAnswers}</td><td>${row.numberOfTests}</td><td>Do ${row.type}</td><td>${row.timestamp}</td></tr>`);
+			$tbody.append(`<tr><td>${i + 1}</td><td>${row.correctAnswers}</td><td>${row.numberOfTests}</td><td>Do ${row.type}</td><td>${row.timestamp}</td></tr>`);
 		}
 	});
 	

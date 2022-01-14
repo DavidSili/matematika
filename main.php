@@ -43,6 +43,7 @@
 			<table class="report-table table table-bordered">
 				<thead>
 				<tr>
+					<th>#</th>
 					<th>Tačnih</th>
 					<th>Ukupno</th>
 					<th>Vrsta</th>
@@ -60,6 +61,6 @@
 	const operand = '<?=$operand?>';
 </script>
 <script src="../assets/js/jquery-3.6.0.min.js"></script>
-<script src="../assets/js/test.js?t=10"></script>
+<script src="../assets/js/test.js?t=11"></script>
 </body>
 </html>
