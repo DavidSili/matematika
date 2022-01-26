@@ -4,7 +4,7 @@ Series of automatically generated tests in calculus
 ![GitHub](https://img.shields.io/github/license/DavidSili/matematika)
 
 ## Description
-This is a simple app intended to help elementary school students learn basic calculus. IMHO one of the best ways to learn something (after the basics are grasped) is through testing. To me as a parent it solved a big chore of continually making and checking tests for my kids. The app is designed primarily to be used on the handheld devices. 
+This is a simple app intended to help elementary school students learn basic calculus. IMHO one of the best ways to learn something (after the basics are grasped) is through testing. To me as a parent it solved a big chore of continually making and checking tests for my kids. The app is designed primarily to be used on the handheld devices.
 
 ## Features:
 - The app so far has 4 basic calculus operations: addition, subtraction, multiplication and division (all of which are only positive, whole numbers).
