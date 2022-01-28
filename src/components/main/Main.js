@@ -1,18 +1,16 @@
 import SideMenu from "../main/SideMenu";
 import Test from "../main/Test";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Main = ({
   operations,
-  step,
-  type,
   numberOfQuestions,
-  handleTypeChange,
-  handleSidebarToggling
+  handleSidebarToggling,
 }) => {
   
   const { operationUrl } = useParams();
   const operation = operations.find(operations => operations.url === `/${operationUrl}`);
+  
   return (
     <div className={"wrapper grid"}>
       <SideMenu
@@ -22,10 +20,7 @@ const Main = ({
       />
       <Test
         operation={operation}
-        step={step}
-        type={type}
         numberOfQuestions={numberOfQuestions}
-        handleTypeChange={handleTypeChange}
         handleSidebarToggling={handleSidebarToggling}
       />
     </div>

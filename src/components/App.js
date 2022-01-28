@@ -1,19 +1,12 @@
-import {Route, Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Home from "./home/Home";
 import Main from "./main/Main";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import operationsObj from "./common/operations.json";
 
 const App = () => {
   const operations = operationsObj.items;
-  const numberOfQuestions = 10;
-  
-  const [step, setStep] = useState(1);
-  const [type, setType] = useState(10);
-  
-  const handleTypeChange = (id) => {
-    setType(id);
-  }
+  const numberOfQuestions = 3;
   
   const handleSidebarToggling = (btn) => {
     if (btn.classList.contains('toggled')) {
@@ -42,10 +35,7 @@ const App = () => {
       />} />
       <Route path=":operationUrl" element={<Main
         operations={operations}
-        step={step}
-        type={type}
         numberOfQuestions={numberOfQuestions}
-        handleTypeChange={handleTypeChange}
         handleSidebarToggling={handleSidebarToggling}
       />} />
     </Routes>

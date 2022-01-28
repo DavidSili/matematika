@@ -6,14 +6,14 @@ const Header = ({
   operation,
   step,
   numberOfQuestions,
-  type,
+  testType,
   handleTypeChange,
   handleSidebarToggling
 }) => {
   return (
     <header className={"header header--bottom-padding"}>
       <button
-        className="btn btn--secondary menu-btn"
+        className="btn btn--secondary btn-tiny menu-btn"
         onClick={(e) => handleSidebarToggling(e.target)}
       >
         <FaBars
@@ -27,7 +27,7 @@ const Header = ({
       />
       <TypeSelector
         types={operation.testTypes}
-        selectedType={type}
+        selectedType={testType}
         handleTypeChange={handleTypeChange}
       />
     </header>

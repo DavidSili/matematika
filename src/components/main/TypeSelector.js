@@ -8,7 +8,7 @@ const TypeSelector = ({types, selectedType, handleTypeChange}) => {
     >
       <label className="form__label">Vrsta testa:</label>
       <select
-        className={"type-selector form__input"}
+        className={"type-selector form__input form__input--wide"}
         value={selectedType}
         onChange={(e) => handleTypeChange(parseInt(e.target.value))}
       >
