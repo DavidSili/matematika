@@ -1,10 +1,12 @@
 import ResultRow from "./ResultRow";
+import {Link} from "react-router-dom";
 
 const Results = ({test, testResults, operation, numberOfQuestions, generateNewTest}) => {
   const trKeys = Object.keys(testResults);
   let correctAnswers = 0;
   trKeys.map((key) => {
     if (test[key].answer === testResults[key]) correctAnswers++;
+    return true;
   });
   
   const numberDeclension = (number, one, two, rest) => {
@@ -42,12 +44,12 @@ const Results = ({test, testResults, operation, numberOfQuestions, generateNewTe
           {`${correctAnswers} ${numberDeclension(correctAnswers, 'tačan', 'tačna', 'tačnih')} od ukupno ${numberOfQuestions} ${numberDeclension(numberOfQuestions, 'zadatka', 'zadatka', 'zadataka')}. Sledeći put će biti bolje!`}
         </div>
       }
+      <Link to="/izvestaj">
+        <button className="btn btn--secondary btn--large-font">Pregled testova</button>
+      </Link>
       <button
         className="btn btn--secondary btn--large-font"
-      >Pregled testova</button>
-      <button
-        className="btn btn--secondary btn--large-font"
-        onClick={() => generateNewTest()}
+        onClick={generateNewTest}
       >Ponovi test</button>
     </section>
   )

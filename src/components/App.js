@@ -3,6 +3,7 @@ import Home from "./home/Home";
 import Main from "./main/Main";
 import { useEffect } from "react";
 import operationsObj from "./common/operations.json";
+import Report from "./report/Report";
 
 const App = () => {
   const operations = operationsObj.items;
@@ -32,6 +33,10 @@ const App = () => {
     <Routes>
       <Route index element={<Home
         operations={operations}
+      />} />
+      <Route path="izvestaj" element={<Report
+        operations={operations}
+        handleSidebarToggling={handleSidebarToggling}
       />} />
       <Route path=":operationUrl" element={<Main
         operations={operations}

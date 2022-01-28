@@ -1,4 +1,4 @@
-import SideMenu from "../main/SideMenu";
+import SideMenu from "../common/SideMenu";
 import Test from "../main/Test";
 import { useParams } from "react-router-dom";
 

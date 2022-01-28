@@ -45,6 +45,9 @@ body {
 	font-size: 3rem;
 	vertical-align: middle;
 	font-weight: normal;
+	&--smaller {
+		font-size: 2.4rem;
+	}
 	&--centered {
 		display: block;
 		text-align: center;

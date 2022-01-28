@@ -17,7 +17,7 @@ const Menu = ({operations, padded, operation= {}}) => {
           <MenuItem
             item={item}
             key={item.name}
-            active={item === operation}
+            active={item.name === operation.name}
           />
         ))}
       </ul>

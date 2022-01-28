@@ -16,18 +16,26 @@ const Test = ({
   const [testResults, setTestResults] = useState({});
   
   useEffect(() => {
-    // generateNewTest();
-  }, []);
-  useEffect(() => {
     setTestResults({});
     setStep(1);
   }, [test]);
+  useEffect(() => {
+    const typesPreferenceStored = localStorage.getItem('typesPreference');
+    const typesPreference = typesPreferenceStored ? JSON.parse(typesPreferenceStored) : {};
+    const thisPreference = typesPreference.hasOwnProperty(operation.name) ?
+      typesPreference[operation.name] : operation.defaultType;
+    setTestType(thisPreference);
+  }, [operation]);
   useEffect(() => {
     generateNewTest();
   }, [operation, testType]);
   
   const handleTypeChange = (id) => {
     setTestType(id);
+    const typesPreferenceStored = localStorage.getItem('typesPreference');
+    const typesPreference = typesPreferenceStored ? JSON.parse(typesPreferenceStored) : {};
+    typesPreference[operation.name] = id;
+    localStorage.setItem('typesPreference', JSON.stringify(typesPreference));
   }
   
   const generateNewTest = () => {
@@ -79,17 +87,17 @@ const Test = ({
         number1 = Math.floor(Math.random() * (max - 1)) + 1;
         number2 = max - number1;
         return {
-          'number1': number1,
-          'number2': number2,
-          'answer': max,
+          number1: number1,
+          number2: number2,
+          answer: max,
         }
       case 'subtraction':
         number1 = Math.floor(Math.random() * (testType - 1)) + 2;
         number2 = Math.floor(Math.random() * (number1 - 1)) + 1;
         return {
-          'number1': number1,
-          'number2': number2,
-          'answer': number1 - number2,
+          number1: number1,
+          number2: number2,
+          answer: number1 - number2,
         }
       case 'multiplication':
         while (foundAnswer === false) {
@@ -101,9 +109,9 @@ const Test = ({
           }
         }
         return {
-          'number1': number1,
-          'number2': number2,
-          'answer': number1 * number2,
+          number1: number1,
+          number2: number2,
+          answer: number1 * number2,
         }
       case 'division':
         while (foundAnswer === false) {
@@ -115,9 +123,15 @@ const Test = ({
           }
         }
         return {
-          'number1': product,
-          'number2': number1,
-          'answer': number2,
+          number1: product,
+          number2: number1,
+          answer: number2,
+        }
+      default:
+        return {
+          number1: null,
+          number2: null,
+          answer: null,
         }
     }
   }
@@ -143,7 +157,7 @@ const Test = ({
   }
   
   return (
-    <main className={"grid__container grid__container--last"}>
+    <main className="grid__container grid__container--last">
       <Header
         operation={operation}
         step={step}
