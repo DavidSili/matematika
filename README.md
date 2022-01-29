@@ -27,8 +27,6 @@ Version 1.0 was written in PHP with the brains of the app in javascript. The pro
 - Add fractions with same 4 operations
 - Improve handheld experience (regarding the use of side menu)
 
-## [DEMO](http://davidsili.com/matematika/)
-
 ## How to install
 Installation instructions in React.js pending.
 
