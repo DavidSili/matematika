@@ -1,7 +1,16 @@
 import SideMenu from "./../common/SideMenu";
 import {FaBars} from "react-icons/fa";
+import OperationReport from "./OperationReport";
 
-const Report = ({operations, handleSidebarToggling, getDateStamp}) => {
+const Report = ({
+  operations,
+  handleSidebarToggling,
+  getDateStamp,
+  getStoredTestReports,
+}) => {
+  const storedTestReports = getStoredTestReports();
+  const operationReportsKeys = Object.keys(storedTestReports);
+  
   return (
     <div className="wrapper grid">
       <SideMenu
@@ -19,6 +28,19 @@ const Report = ({operations, handleSidebarToggling, getDateStamp}) => {
           </button>
           <div className={"title title--smaller"}>Izveštaj za: {getDateStamp(true)}</div>
         </header>
+        <section
+          className="report"
+        >
+          {operationReportsKeys.map((operationReportKey, key) => {
+            return <OperationReport
+              operationReport={storedTestReports[operationReportKey]}
+              operation={operations.find((operation) => {
+                return operation.name === operationReportKey;
+              })}
+              key={key}
+            />
+          })}
+        </section>
       </main>
     </div>
   )

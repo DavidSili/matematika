@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import Home from "./home/Home";
 import Main from "./main/Main";
 import { useEffect } from "react";
@@ -7,7 +7,9 @@ import Report from "./report/Report";
 
 const App = () => {
   const operations = operationsObj.items;
-  const numberOfQuestions = 3;
+  const numberOfQuestions = 10;
+  
+  // UI related functions
   
   const handleSidebarToggling = (btn) => {
     if (btn.classList.contains('toggled')) {
@@ -17,6 +19,23 @@ const App = () => {
       btn.classList.add('toggled');
       openSidebar(true);
     }
+  }
+  
+  const openSidebar = (open) => {
+    document.querySelector('.wrapper').scrollLeft = open ? -1000 : 1000;
+  }
+  
+  useEffect(() => {
+    if (window.location.pathname !== '/') {
+      openSidebar(false);
+    }
+  }, []);
+
+  // Report related functions
+  
+  const getStoredTestReports = () => {
+    const currentReportsStored = localStorage.getItem('reports');
+    return currentReportsStored ? JSON.parse(currentReportsStored) : {};
   }
   
   const getDateStamp = (rs = false) => {
@@ -30,16 +49,6 @@ const App = () => {
     return rs ? `${day}.${month}.${year}.` : `${year}-${month}-${day}`
   }
   
-  useEffect(() => {
-    if (window.location.pathname !== '/') {
-      openSidebar(false);
-    }
-  }, []);
-  
-  const openSidebar = (open) => {
-    document.querySelector('.wrapper').scrollLeft = open ? -1000 : 1000;
-  }
-  
   return (
     <Routes>
       <Route index element={<Home
@@ -49,12 +58,14 @@ const App = () => {
         operations={operations}
         handleSidebarToggling={handleSidebarToggling}
         getDateStamp={getDateStamp}
+        getStoredTestReports={getStoredTestReports}
       />} />
       <Route path=":operationUrl" element={<Main
         operations={operations}
         numberOfQuestions={numberOfQuestions}
         handleSidebarToggling={handleSidebarToggling}
         getDateStamp={getDateStamp}
+        getStoredTestReports={getStoredTestReports}
       />} />
     </Routes>
   );

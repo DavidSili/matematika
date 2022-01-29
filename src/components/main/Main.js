@@ -7,6 +7,7 @@ const Main = ({
   numberOfQuestions,
   handleSidebarToggling,
   getDateStamp,
+  getStoredTestReports,
 }) => {
   
   const { operationUrl } = useParams();
@@ -24,6 +25,7 @@ const Main = ({
         numberOfQuestions={numberOfQuestions}
         handleSidebarToggling={handleSidebarToggling}
         getDateStamp={getDateStamp}
+        getStoredTestReports={getStoredTestReports}
       />
     </div>
   )
