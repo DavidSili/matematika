@@ -6,6 +6,7 @@ const Main = ({
   operations,
   numberOfQuestions,
   handleSidebarToggling,
+  getDateStamp,
 }) => {
   
   const { operationUrl } = useParams();
@@ -22,6 +23,7 @@ const Main = ({
         operation={operation}
         numberOfQuestions={numberOfQuestions}
         handleSidebarToggling={handleSidebarToggling}
+        getDateStamp={getDateStamp}
       />
     </div>
   )

@@ -19,6 +19,17 @@ const App = () => {
     }
   }
   
+  const getDateStamp = (rs = false) => {
+    const d = new Date();
+    let day = d.getDate().toString();
+    day = day.length === 1 ? '0' + day : day;
+    let month = (d.getMonth() + 1).toString();
+    month = month.length === 1 ? '0' + month : month;
+    const year = d.getFullYear();
+    
+    return rs ? `${day}.${month}.${year}.` : `${year}-${month}-${day}`
+  }
+  
   useEffect(() => {
     if (window.location.pathname !== '/') {
       openSidebar(false);
@@ -37,11 +48,13 @@ const App = () => {
       <Route path="izvestaj" element={<Report
         operations={operations}
         handleSidebarToggling={handleSidebarToggling}
+        getDateStamp={getDateStamp}
       />} />
       <Route path=":operationUrl" element={<Main
         operations={operations}
         numberOfQuestions={numberOfQuestions}
         handleSidebarToggling={handleSidebarToggling}
+        getDateStamp={getDateStamp}
       />} />
     </Routes>
   );

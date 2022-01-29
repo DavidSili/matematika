@@ -7,28 +7,31 @@ const Test = ({
   operation,
   numberOfQuestions,
   handleSidebarToggling,
+  getDateStamp,
 }) => {
+  const getPreferredTestType = () => {
+    const typesPreferenceStored = localStorage.getItem('typesPreference');
+    const typesPreference = typesPreferenceStored ? JSON.parse(typesPreferenceStored) : {};
+    return typesPreference.hasOwnProperty(operation.name) ?
+      typesPreference[operation.name] : operation.defaultType;
+  }
   
   const [answer, setAnswer] = useState('');
   const [step, setStep] = useState(1);
-  const [testType, setTestType] = useState(10);
+  const [testType, setTestType] = useState(getPreferredTestType);
   const [test, setTest] = useState({});
   const [testResults, setTestResults] = useState({});
   
   useEffect(() => {
-    setTestResults({});
-    setStep(1);
-  }, [test]);
-  useEffect(() => {
-    const typesPreferenceStored = localStorage.getItem('typesPreference');
-    const typesPreference = typesPreferenceStored ? JSON.parse(typesPreferenceStored) : {};
-    const thisPreference = typesPreference.hasOwnProperty(operation.name) ?
-      typesPreference[operation.name] : operation.defaultType;
-    setTestType(thisPreference);
+    setTestType(getPreferredTestType);
   }, [operation]);
   useEffect(() => {
     generateNewTest();
   }, [operation, testType]);
+  useEffect(() => {
+    if (step === 0) storeTestResults();
+    if (step === 1) checkTestsReportData();
+  }, [step])
   
   const handleTypeChange = (id) => {
     setTestType(id);
@@ -44,6 +47,8 @@ const Test = ({
     let newTestItem;
     for (let i = 1; i <= (numberOfQuestions + 1); i++) {
       if (i > numberOfQuestions) {
+        setTestResults({});
+        setStep(1);
         setTest(newTest);
       } else {
         newTestItem = getTestItem();
@@ -156,6 +161,70 @@ const Test = ({
     }
   }
   
+  const getTimeRs = (seconds = true) => {
+    const d = new Date();
+    const hr = d.getHours();
+    let min = d.getMinutes();
+    if (min < 10) {
+      min = '0' + min;
+    }
+    let sec = d.getSeconds();
+    if (sec < 10) {
+      sec = '0' + sec;
+    }
+    sec = seconds ? `:${sec}` : ''
+    
+    const day = d.getDate();
+    const month = d.getMonth() + 1;
+    const year = d.getFullYear();
+    
+    return `${day}.${month}.${year}. ${hr}:${min}${sec}`;
+  }
+  
+  const getUnixTimestamp = () => {
+    const d = new Date;
+    
+    return d.getTime();
+  }
+  
+  const calculateCorrectAnswers = () => {
+    const trKeys = Object.keys(testResults);
+    let correctAnswers = 0;
+    trKeys.map((key) => {
+      if (test[key].answer === testResults[key]) correctAnswers++;
+      return true;
+    });
+    return correctAnswers;
+  }
+  
+  const storeTestResults = () => {
+    const currentReportsStored = localStorage.getItem('reports');
+    const currentReports = currentReportsStored ? JSON.parse(currentReportsStored) : {};
+    if (!currentReports.hasOwnProperty(operation.name)) currentReports[operation.name] = [];
+    const thisTestStats = {
+      correctAnswers: correctAnswers,
+      numberOfTests: numberOfQuestions,
+      percentage: correctAnswers === 0 ? 0 :
+        Math.round((correctAnswers / numberOfQuestions) * 100) / 100,
+      timestamp: getTimeRs(false),
+      unixTimestamp: getUnixTimestamp(),
+      type: testType,
+    };
+    currentReports[operation.name].push(thisTestStats);
+    localStorage.setItem('reports', JSON.stringify(currentReports));
+  }
+  
+  const checkTestsReportData = () => {
+    const savedDate = localStorage.getItem('testDate');
+    const currentDate = getDateStamp();
+    if (savedDate !== currentDate) {
+      localStorage.setItem('testDate', currentDate);
+      localStorage.setItem('reports', JSON.stringify({}));
+    }
+  }
+  
+  const correctAnswers = calculateCorrectAnswers();
+  
   return (
     <main className="grid__container grid__container--last">
       <Header
@@ -172,6 +241,7 @@ const Test = ({
         operation={operation}
         numberOfQuestions={numberOfQuestions}
         generateNewTest={generateNewTest}
+        correctAnswers={correctAnswers}
       />}
       {step > 0 && Object.keys(test).length > 0 && <TestForm
         operation={operation}

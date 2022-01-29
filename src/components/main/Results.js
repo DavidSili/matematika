@@ -1,13 +1,16 @@
 import ResultRow from "./ResultRow";
 import {Link} from "react-router-dom";
 
-const Results = ({test, testResults, operation, numberOfQuestions, generateNewTest}) => {
+const Results = ({
+  test,
+  testResults,
+  operation,
+  numberOfQuestions,
+  generateNewTest,
+  correctAnswers,
+}) => {
+  
   const trKeys = Object.keys(testResults);
-  let correctAnswers = 0;
-  trKeys.map((key) => {
-    if (test[key].answer === testResults[key]) correctAnswers++;
-    return true;
-  });
   
   const numberDeclension = (number, one, two, rest) => {
     const numberText = number.toString();
