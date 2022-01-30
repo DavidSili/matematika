@@ -5,10 +5,12 @@ import * as Utils from './../common/utils';
 
 /**
  * @param {array} operations
+ * @param {function} useTitle
  * @returns {JSX.Element}
  * @constructor
  */
-const Report = ({ operations }) => {
+const Report = ({ operations, useTitle }) => {
+  useTitle('Matematika | Pregled testova');
   const storedTestReports = Utils.getStoredTestReports();
   const operationReportsKeys = Object.keys(storedTestReports);
   

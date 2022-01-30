@@ -4,11 +4,13 @@ import Menu from '../common/Menu';
  * A landing page component
  *
  * @param {array} operations
+ * @param {function} useTitle
  * @returns {JSX.Element}
  * @constructor
  * @public
  */
-const Home = ({operations}) => {
+const Home = ({operations, useTitle}) => {
+  useTitle('Matematika');
   return (
     <div className="home">
       <header className="header">

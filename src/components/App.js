@@ -20,11 +20,30 @@ const App = () => {
     }
   }, []);
   
+  const useTitle = (title) => {
+    useEffect(() => {
+      const prevTitle = document.title
+      document.title = title
+      return () => {
+        document.title = prevTitle
+      }
+    })
+  }
+  
   return (
     <Routes>
-      <Route index element={<Home operations={operations} />} />
-      <Route path=":operationUrl" element={<Main operations={operations} />} />
-      <Route path="izvestaj" element={<Report operations={operations} />} />
+      <Route index element={<Home
+        operations={operations}
+        useTitle={useTitle}
+      />} />
+      <Route path=":operationUrl" element={<Main
+        operations={operations}
+        useTitle={useTitle}
+      />} />
+      <Route path="izvestaj" element={<Report
+        operations={operations}
+        useTitle={useTitle}
+      />} />
     </Routes>
   );
 }
