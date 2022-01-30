@@ -26,6 +26,8 @@ Version 1.0 was written in PHP with the brains of the app in javascript. The pro
 - internationalization (at the moment it is available only in Serbian)
 - Add fractions with same 4 operations
 - Improve handheld experience (regarding the use of side menu)
+- Write tests for the app
+- Write prop-types for the components
 
 ## How to install
 Installation instructions in React.js pending.

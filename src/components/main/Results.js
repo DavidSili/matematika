@@ -1,17 +1,25 @@
-import ResultRow from "./ResultRow";
-import {Link} from "react-router-dom";
+import { Link } from 'react-router-dom';
+import settings from './../common/settings.json';
 
 const Results = ({
   test,
   testResults,
   operation,
-  numberOfQuestions,
   generateNewTest,
   correctAnswers,
 }) => {
   
   const trKeys = Object.keys(testResults);
   
+  /**
+   * Prepares the correct form of nouns in serbian language
+   *
+   * @param {int} number
+   * @param {string} one
+   * @param {string} two
+   * @param {string} rest
+   * @returns {string}
+   */
   const numberDeclension = (number, one, two, rest) => {
     const numberText = number.toString();
     const numberTextLength = numberText.length;
@@ -30,21 +38,31 @@ const Results = ({
     <section className="results">
       <table className="results__table">
         <tbody>
-        {trKeys.map(( key) => (
-          <ResultRow
-            key={key}
-            answer={testResults[key]}
-            testData={test[key]}
-            operand={operation.operand}
-          >
-          </ResultRow>
-        ))}
+        {trKeys.map((key) => {
+          const answer = testResults[key]
+          const testData = test[key]
+          const correct = answer === testData.answer;
+          const answerCellClassName = correct ? 'results__answer--correct' : 'results__answer--incorrect';
+          return (
+            <tr key={key}>
+              <td className="results__cell results__cell--right">{testData.number1}</td>
+              <td className="results__cell">{operation.operand}</td>
+              <td className="results__cell results__cell--left">{testData.number2}</td>
+              <td className="results__cell results__cell--">=</td>
+              <td className="results__cell results__cell--left"><span className={`results__answer ${answerCellClassName}`}>{answer}</span>
+            {!correct && <span className="results__answer results__answer--correction">{testData.answer}</span>}
+              </td>
+            </tr>
+          )
+        })}
         </tbody>
       </table>
-      {correctAnswers === numberOfQuestions && <div className="mtb-5">Bravo! Svi odgovori su ti tačni!</div>}
-      {correctAnswers < numberOfQuestions &&
+      {correctAnswers === settings.numberOfQuestions && <div className="mtb-5">Bravo! Svi odgovori su ti tačni!</div>}
+      {correctAnswers < settings.numberOfQuestions &&
         <div className="mtb-5">
-          {`${correctAnswers} ${numberDeclension(correctAnswers, 'tačan', 'tačna', 'tačnih')} od ukupno ${numberOfQuestions} ${numberDeclension(numberOfQuestions, 'zadatka', 'zadatka', 'zadataka')}. Sledeći put će biti bolje!`}
+          {`${correctAnswers} ${numberDeclension(correctAnswers, 'tačan', 'tačna', 'tačnih')} od` +
+            ` ukupno ${settings.numberOfQuestions} ${numberDeclension(settings.numberOfQuestions, 'zadatka',
+            'zadatka', 'zadataka')}. Sledeći put će biti bolje!`}
         </div>
       }
       <Link to="/izvestaj">

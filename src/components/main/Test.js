@@ -1,15 +1,19 @@
 import Header from './Header';
-import { useEffect, useState } from "react";
-import Results from "./Results";
-import TestForm from "./TestForm";
+import { useEffect, useState } from 'react';
+import Results from './Results';
+import TestForm from './TestForm';
+import * as Utils from './../common/utils';
+import settings from './../common/settings.json';
 
-const Test = ({
-  operation,
-  numberOfQuestions,
-  handleSidebarToggling,
-  getDateStamp,
-  getStoredTestReports
-}) => {
+/**
+ * @param {object} operation
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const Test = ({ operation }) => {
+  /**
+   * @returns {int}
+   */
   const getPreferredTestType = () => {
     const typesPreferenceStored = localStorage.getItem('typesPreference');
     const typesPreference = typesPreferenceStored ? JSON.parse(typesPreferenceStored) : {};
@@ -19,12 +23,12 @@ const Test = ({
   
   const [answer, setAnswer] = useState('');
   const [step, setStep] = useState(1);
-  const [testType, setTestType] = useState(getPreferredTestType);
+  const [testType, setTestType] = useState(getPreferredTestType());
   const [test, setTest] = useState({});
   const [testResults, setTestResults] = useState({});
   
   useEffect(() => {
-    setTestType(getPreferredTestType);
+    setTestType(getPreferredTestType());
   }, [operation]);
   useEffect(() => {
     generateNewTest();
@@ -36,6 +40,9 @@ const Test = ({
   
   // Test type related function
   
+  /**
+   * @param {int} id
+   */
   const handleTypeChange = (id) => {
     setTestType(id);
     const typesPreferenceStored = localStorage.getItem('typesPreference');
@@ -50,8 +57,8 @@ const Test = ({
     let newTest = {};
     let hasZero = false;
     let newTestItem;
-    for (let i = 1; i <= (numberOfQuestions + 1); i++) {
-      if (i > numberOfQuestions) {
+    for (let i = 1; i <= (settings.numberOfQuestions + 1); i++) {
+      if (i > settings.numberOfQuestions) {
         setTestResults({});
         setStep(1);
         setTest(newTest);
@@ -75,6 +82,13 @@ const Test = ({
     }
   }
   
+  /**
+   * Checks if the similar objects is already present in the array
+   *
+   * @param {array} collection
+   * @param {object} object
+   * @returns {boolean}
+   */
   const inArrayObj = (collection, object) => {
     const keys = Object.keys(collection);
     let row;
@@ -88,6 +102,10 @@ const Test = ({
     return false;
   }
   
+  /**
+   * @returns {{answer: int, number1: int, number2: int}|
+   *           {answer: null, number1: null, number2: null}}
+   */
   const getTestItem = () => {
     let number1, number2, max, max2, product;
     let foundAnswer = false;
@@ -153,25 +171,34 @@ const Test = ({
     addAnswer(answer);
   }
   
+  /**
+   * @param {int|string} value
+   */
   const addAnswer = (value) => {
     const newResults = {
       ...testResults,
       [step]: parseInt(value)
     };
     setTestResults(newResults);
-    if (step === numberOfQuestions) {
+    if (step === settings.numberOfQuestions) {
       setStep(0);
     } else {
       setStep(step + 1);
     }
   }
   
+  /**
+   * @returns {int|bigint}
+   */
   const getUnixTimestamp = () => {
-    const d = new Date;
+    const d = new Date();
     
     return d.getTime();
   }
   
+  /**
+   * @returns {int}
+   */
   const calculateCorrectAnswers = () => {
     const trKeys = Object.keys(testResults);
     let correctAnswers = 0;
@@ -184,19 +211,22 @@ const Test = ({
   
   // Local storage related functions
   
+  /**
+   * @param {object} reports
+   */
   const setStoredTestReports = (reports) => {
     localStorage.setItem('reports', JSON.stringify(reports));
   }
   
   const storeTestResults = () => {
-    const currentReports = getStoredTestReports();
+    const currentReports = Utils.getStoredTestReports();
     if (!currentReports.hasOwnProperty(operation.name)) currentReports[operation.name] = [];
     const thisTestStats = {
       correctAnswers: correctAnswers,
-      numberOfTests: numberOfQuestions,
+      numberOfTests: settings.numberOfQuestions,
       percentage: correctAnswers === 0 ? 0 :
-        Math.round((correctAnswers / numberOfQuestions) * 100) / 100,
-      timestamp: getTimeRs(false),
+        Math.round((correctAnswers / settings.numberOfQuestions) * 100) / 100,
+      timestamp: Utils.getTimeRs(false),
       unixTimestamp: getUnixTimestamp(),
       type: testType,
     };
@@ -204,36 +234,17 @@ const Test = ({
     setStoredTestReports(currentReports);
   }
   
+  /**
+   * Empties the stored reports on the first test of the day
+   */
   const checkTestsReportData = () => {
     const savedDate = localStorage.getItem('testDate');
-    const currentDate = getDateStamp();
+    const currentDate = Utils.getDateStamp();
     if (savedDate !== currentDate) {
       localStorage.setItem('testDate', currentDate);
       localStorage.setItem('reports', JSON.stringify({}));
     }
   }
-  
-  const getTimeRs = (seconds = true) => {
-    const d = new Date();
-    const hr = d.getHours();
-    let min = d.getMinutes();
-    if (min < 10) {
-      min = '0' + min;
-    }
-    let sec = d.getSeconds();
-    if (sec < 10) {
-      sec = '0' + sec;
-    }
-    sec = seconds ? `:${sec}` : ''
-    
-    const day = d.getDate();
-    const month = d.getMonth() + 1;
-    const year = d.getFullYear();
-    
-    return `${day}.${month}.${year}. ${hr}:${min}${sec}`;
-  }
-  
-  // Results related function
   
   const correctAnswers = calculateCorrectAnswers();
   
@@ -242,16 +253,13 @@ const Test = ({
       <Header
         operation={operation}
         step={step}
-        numberOfQuestions={numberOfQuestions}
         testType={testType}
         handleTypeChange={handleTypeChange}
-        handleSidebarToggling={handleSidebarToggling}
       />
       {step === 0 && <Results
         test={test}
         testResults={testResults}
         operation={operation}
-        numberOfQuestions={numberOfQuestions}
         generateNewTest={generateNewTest}
         correctAnswers={correctAnswers}
       />}

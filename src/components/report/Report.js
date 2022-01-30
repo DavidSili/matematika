@@ -1,14 +1,15 @@
-import SideMenu from "./../common/SideMenu";
-import {FaBars} from "react-icons/fa";
-import OperationReport from "./OperationReport";
+import SideMenu from './../common/SideMenu';
+import {FaBars} from 'react-icons/fa';
+import OperationReport from './OperationReport';
+import * as Utils from './../common/utils';
 
-const Report = ({
-  operations,
-  handleSidebarToggling,
-  getDateStamp,
-  getStoredTestReports,
-}) => {
-  const storedTestReports = getStoredTestReports();
+/**
+ * @param {array} operations
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const Report = ({ operations }) => {
+  const storedTestReports = Utils.getStoredTestReports();
   const operationReportsKeys = Object.keys(storedTestReports);
   
   return (
@@ -19,14 +20,14 @@ const Report = ({
         padded={false}
       />
       <main className="grid__container grid__container--last">
-        <header className={"header header--bottom-padding"}>
+        <header className="header header--bottom-padding">
           <button
             className="btn btn--secondary btn-tiny menu-btn"
-            onClick={(e) => handleSidebarToggling(e.target)}
+            onClick={(e) => Utils.handleSidebarToggling(e.target)}
           >
             <FaBars role="button" />
           </button>
-          <div className={"title title--smaller"}>Izveštaj za: {getDateStamp(true)}</div>
+          <div className="title title--smaller">Izveštaj za: {Utils.getDateStamp(true)}</div>
         </header>
         <section
           className="report"

@@ -1,32 +1,27 @@
-import SideMenu from "../common/SideMenu";
-import Test from "../main/Test";
-import { useParams } from "react-router-dom";
+import SideMenu from '../common/SideMenu';
+import Test from '../main/Test';
+import { useParams } from 'react-router-dom';
 
-const Main = ({
-  operations,
-  numberOfQuestions,
-  handleSidebarToggling,
-  getDateStamp,
-  getStoredTestReports,
-}) => {
+/**
+ * The main wrapper that contains both side menu and the test
+ *
+ * @param {array} operations
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const Main = ({ operations }) => {
   
   const { operationUrl } = useParams();
   const operation = operations.find(operations => operations.url === `/${operationUrl}`);
   
   return (
-    <div className={"wrapper grid"}>
+    <div className="wrapper grid">
       <SideMenu
         operations={operations}
         operation={operation}
         padded={false}
       />
-      <Test
-        operation={operation}
-        numberOfQuestions={numberOfQuestions}
-        handleSidebarToggling={handleSidebarToggling}
-        getDateStamp={getDateStamp}
-        getStoredTestReports={getStoredTestReports}
-      />
+      <Test operation={operation} />
     </div>
   )
 }

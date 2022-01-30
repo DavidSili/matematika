@@ -1,12 +1,21 @@
-import {useRef} from 'react';
+import { useRef } from 'react';
 
+/**
+ * @param {object} operation
+ * @param {object} stepData
+ * @param {int} answer
+ * @param {function} setAnswer
+ * @param {function} handleAnswerSubmit
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const TestForm = ({operation, stepData, answer, setAnswer, handleAnswerSubmit}) => {
   const inputRef = useRef();
   
   return (
     <form
       autoComplete="off"
-      className={"form form--question"}
+      className="form form--question"
       onSubmit={handleAnswerSubmit}
     >
       <div className="mb-3">
@@ -19,7 +28,7 @@ const TestForm = ({operation, stepData, answer, setAnswer, handleAnswerSubmit}) 
         <input
           autoFocus
           ref={inputRef}
-          className={"form__input form__input--medium form__input--large-font"}
+          className="form__input form__input--medium form__input--large-font"
           type="number"
           step="1"
           min="0"
@@ -28,7 +37,7 @@ const TestForm = ({operation, stepData, answer, setAnswer, handleAnswerSubmit}) 
         />
       </div>
       <button
-        className={"btn btn--secondary btn--large-font"}
+        className="btn btn--secondary btn--large-font"
         aria-label="Dalje"
         onClick={() => inputRef.current.focus()}
       >Sledeći</button>

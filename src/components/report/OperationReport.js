@@ -1,3 +1,9 @@
+/**
+ * @param {array} operationReport
+ * @param {object} operation
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const OperationReport = ({operationReport, operation}) => {
   return (
     <div
