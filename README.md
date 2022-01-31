@@ -20,7 +20,9 @@ As time passed and other parents gave me feedback, I've added other operations. 
 
 I have also noticed that only using random numbers would make tests very easy (i.e. in multiplications test sometimes there would be even 8 questions with 0 as the answer), so I've added some more restrictions on which questions would be valid.
 
-Version 1.0 was written in PHP with the brains of the app in javascript. The project is currently being rewritten in React.js 
+Version 1.0 was written in PHP with the brains of the app in javascript. The project is currently being rewritten in React.js
+
+## [DEMO](https://gracious-jepsen-ac5f06.netlify.app/)
 
 ## Planned updates
 - internationalization (at the moment it is available only in Serbian)
@@ -28,9 +30,6 @@ Version 1.0 was written in PHP with the brains of the app in javascript. The pro
 - Improve handheld experience (regarding the use of side menu)
 - Write tests for the app
 - Write prop-types for the components
-
-## How to install
-Installation instructions in React.js pending.
 
 ## How to use
 1. After landing on the starting page (url should point to the folder where it is deployed) chose which operation you would like to be tested on.
