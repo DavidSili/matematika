@@ -1,5 +1,5 @@
 import Header from './Header';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Results from './Results';
 import TestForm from './TestForm';
 import * as Utils from './../common/utils';
@@ -11,32 +11,19 @@ import settings from './../common/settings.json';
  * @constructor
  */
 const Test = ({ operation }) => {
-  /**
-   * @returns {int}
-   */
-  const getPreferredTestType = () => {
+  
+  const getPreferredTestType = useCallback(() => {
     const typesPreferenceStored = localStorage.getItem('typesPreference');
     const typesPreference = typesPreferenceStored ? JSON.parse(typesPreferenceStored) : {};
     return typesPreference.hasOwnProperty(operation.name) ?
       typesPreference[operation.name] : operation.defaultType;
-  }
+  }, [operation])
   
   const [answer, setAnswer] = useState('');
   const [step, setStep] = useState(1);
   const [testType, setTestType] = useState(getPreferredTestType());
   const [test, setTest] = useState({});
   const [testResults, setTestResults] = useState({});
-  
-  useEffect(() => {
-    setTestType(getPreferredTestType());
-  }, [operation]);
-  useEffect(() => {
-    generateNewTest();
-  }, [operation, testType]);
-  useEffect(() => {
-    if (step === 0) storeTestResults();
-    if (step === 1) checkTestsReportData();
-  }, [step])
   
   // Test type related function
   
@@ -53,60 +40,11 @@ const Test = ({ operation }) => {
   
   // Test related functions
   
-  const generateNewTest = () => {
-    let newTest = {};
-    let hasZero = false;
-    let newTestItem;
-    for (let i = 1; i <= (settings.numberOfQuestions + 1); i++) {
-      if (i > settings.numberOfQuestions) {
-        setTestResults({});
-        setStep(1);
-        setTest(newTest);
-      } else {
-        newTestItem = getTestItem();
-        if (inArrayObj(newTest, newTestItem)) {
-          i--;
-          continue;
-        }
-        if (operation.name === 'multiplication' && newTestItem.answer === 0) {
-          if (!hasZero) {
-            hasZero = true;
-            newTest[i] = newTestItem;
-          } else {
-            i--;
-          }
-        } else {
-          newTest[i] = newTestItem;
-        }
-      }
-    }
-  }
-  
-  /**
-   * Checks if the similar objects is already present in the array
-   *
-   * @param {array} collection
-   * @param {object} object
-   * @returns {boolean}
-   */
-  const inArrayObj = (collection, object) => {
-    const keys = Object.keys(collection);
-    let row;
-    for (let i = 0; i < keys.length; i++) {
-      row = collection[parseInt(keys[i])];
-      if (row.number1 === object.number1 && row.number2 === object.number2) {
-        return true;
-      }
-    }
-    
-    return false;
-  }
-  
   /**
    * @returns {{answer: int, number1: int, number2: int}|
    *           {answer: null, number1: null, number2: null}}
    */
-  const getTestItem = () => {
+  const getTestItem = useCallback(() => {
     let number1, number2, max, max2, product;
     let foundAnswer = false;
     switch (operation.name) {
@@ -162,6 +100,58 @@ const Test = ({ operation }) => {
           answer: null,
         }
     }
+  }, [testType, operation]);
+  
+  /**
+   * @returns {int}
+   */
+  const generateNewTest = useCallback(() => {
+    let newTest = {};
+    let hasZero = false;
+    let newTestItem;
+    for (let i = 1; i <= (settings.numberOfQuestions + 1); i++) {
+      if (i > settings.numberOfQuestions) {
+        setTestResults({});
+        setStep(1);
+        setTest(newTest);
+      } else {
+        newTestItem = getTestItem();
+        if (inArrayObj(newTest, newTestItem)) {
+          i--;
+          continue;
+        }
+        if (operation.name === 'multiplication' && newTestItem.answer === 0) {
+          if (!hasZero) {
+            hasZero = true;
+            newTest[i] = newTestItem;
+          } else {
+            i--;
+          }
+        } else {
+          newTest[i] = newTestItem;
+        }
+      }
+    }
+  }, [getTestItem, operation]);
+  
+  /**
+   * Checks if the similar objects is already present in the array
+   *
+   * @param {array} collection
+   * @param {object} object
+   * @returns {boolean}
+   */
+  const inArrayObj = (collection, object) => {
+    const keys = Object.keys(collection);
+    let row;
+    for (let i = 0; i < keys.length; i++) {
+      row = collection[parseInt(keys[i])];
+      if (row.number1 === object.number1 && row.number2 === object.number2) {
+        return true;
+      }
+    }
+    
+    return false;
   }
   
   const handleAnswerSubmit = (e) => {
@@ -218,7 +208,9 @@ const Test = ({ operation }) => {
     localStorage.setItem('reports', JSON.stringify(reports));
   }
   
-  const storeTestResults = () => {
+  const correctAnswers = calculateCorrectAnswers();
+  
+  const storeTestResults = useCallback(() => {
     const currentReports = Utils.getStoredTestReports();
     if (!currentReports.hasOwnProperty(operation.name)) currentReports[operation.name] = [];
     const thisTestStats = {
@@ -232,7 +224,7 @@ const Test = ({ operation }) => {
     };
     currentReports[operation.name].push(thisTestStats);
     setStoredTestReports(currentReports);
-  }
+  }, [correctAnswers, operation, testType]);
   
   /**
    * Empties the stored reports on the first test of the day
@@ -246,7 +238,16 @@ const Test = ({ operation }) => {
     }
   }
   
-  const correctAnswers = calculateCorrectAnswers();
+  useEffect(() => {
+    setTestType(getPreferredTestType());
+  }, [operation, getPreferredTestType]);
+  useEffect(() => {
+    generateNewTest();
+  }, [operation, testType, generateNewTest]);
+  useEffect(() => {
+    if (step === 0) storeTestResults();
+    if (step === 1) checkTestsReportData();
+  }, [step, storeTestResults])
   
   return (
     <main className="grid__container grid__container--last">
