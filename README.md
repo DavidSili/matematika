@@ -41,3 +41,10 @@ Version 1.0 was written in PHP with the brains of the app in javascript. The pro
 
 ## How to contribute to the project
 If you would like to contribute, you are more than welcome. After the internationalization is implemented this would be one of the best ways to help. Also, if you implement some other operations, it would also be helpful.
+
+## Changelog
+- 2.0.3 - Fixed menu width for the landing page (for desktop)
+- 2.0.2 - Added demo link to the README.md
+- 2.0.1 - Optimized components, fixed headings, prepared project for the deployment
+- 2.0 - Rewrote it in React.js
+- 1.0 - A base version written in PHP/JS
